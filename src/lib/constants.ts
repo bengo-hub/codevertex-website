@@ -23,7 +23,6 @@ export const SSO_URL = 'https://accounts.codevertexitsolutions.com';
 export const NAV_LINKS = [
   { label: 'Services', href: '/services' },
   { label: 'Digitika', href: '/digitika' },
-  { label: 'Pricing', href: '/pricing' },
   { label: 'About', href: '/about' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },

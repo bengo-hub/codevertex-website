@@ -1,13 +1,11 @@
 'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { SERVICES, SERVICE_CATEGORIES, STATUS_STYLES, type Service } from '@/config/services';
-import { Badge } from '@/components/ui/badge';
+import { POWER_SUITE, STATUS_STYLES, type PowerSuiteProduct } from '@/config/services';
 import { cn } from '@/lib/utils';
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function ServiceCard({ service, index }: { service: PowerSuiteProduct; index: number }) {
   const Icon = service.icon;
   return (
     <motion.div
@@ -54,8 +52,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
 }
 
 export function ServicesSection() {
-  const [active, setActive] = useState<string | null>(null);
-  const filtered = active ? SERVICES.filter(s => s.category === active) : SERVICES;
+  const filtered = POWER_SUITE;
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
@@ -72,41 +69,17 @@ export function ServicesSection() {
             </p>
           </div>
 
-          {/* Category filters */}
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setActive(null)}
-              className={cn(
-                'h-9 px-5 rounded-full text-xs font-bold transition-all',
-                !active ? 'bg-foreground text-background shadow-sm' : 'bg-secondary text-muted-foreground border border-border hover:border-primary/30'
-              )}
-            >All</button>
-            {SERVICE_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setActive(cat.id)}
-                className={cn(
-                  'h-9 px-5 rounded-full text-xs font-bold transition-all',
-                  active === cat.id ? 'bg-foreground text-background shadow-sm' : 'bg-secondary text-muted-foreground border border-border hover:border-primary/30'
-                )}
-              >{cat.name}</button>
-            ))}
+          <div className="flex items-center gap-3">
+            <Link href="/services" className="h-9 px-5 rounded-full text-xs font-bold bg-secondary text-muted-foreground border border-border hover:border-primary/30 transition-all inline-flex items-center gap-1.5">
+              View all services <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
 
         {/* Grid */}
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={active ?? 'all'}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
-          >
-            {filtered.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
-          </motion.div>
-        </AnimatePresence>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {filtered.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
+        </div>
       </div>
     </section>
   );

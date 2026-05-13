@@ -21,22 +21,22 @@ export function TrustSection() {
       <div className="max-w-7xl mx-auto space-y-14">
 
         {/* Team photo + pull quote */}
-        <div className="relative rounded-2xl overflow-hidden h-72 border border-border">
+        <div className="relative rounded-2xl overflow-hidden h-80 border border-border">
           <Image
             src="/images/team.jpg"
             alt="Codevertex IT Solutions team at an event, wearing company t-shirts"
             fill
-            className="object-cover"
+            className="object-cover object-top"
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-background/90 via-background/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-black/85 via-black/50 to-black/10" />
           <div className="absolute inset-0 flex items-center px-10">
             <div className="max-w-xl">
               <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">The team</p>
-              <blockquote className="text-3xl sm:text-4xl font-black text-foreground leading-snug tracking-tight mb-4">
+              <blockquote className="text-3xl sm:text-4xl font-black text-white leading-snug tracking-tight mb-4">
                 &ldquo;Built in Kisumu. Engineered for Africa. Designed for the world.&rdquo;
               </blockquote>
-              <cite className="not-italic text-sm text-muted-foreground font-medium">
+              <cite className="not-italic text-sm text-white/60 font-medium">
                 Codevertex IT Solutions — Pioneer House, Oginga Street, Kisumu
               </cite>
             </div>
