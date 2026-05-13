@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  serverExternalPackages: ['pg', 'pg-pool'],
+  serverExternalPackages: ['pg', 'pg-pool', '@prisma/adapter-pg', '@prisma/client'],
 };
 
 export default nextConfig;
