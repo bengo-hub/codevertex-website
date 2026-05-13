@@ -18,7 +18,7 @@ echo "=========================================="
 MAX_RETRIES=30
 RETRY=0
 
-until DATABASE_URL="$MIGRATE_URL" prisma db push --accept-data-loss --skip-generate 2>&1 || [ $RETRY -eq $MAX_RETRIES ]; do
+until prisma db push --url "$MIGRATE_URL" --accept-data-loss 2>&1 || [ $RETRY -eq $MAX_RETRIES ]; do
   RETRY=$((RETRY+1))
   echo "DB not ready or schema push failed (attempt $RETRY/$MAX_RETRIES) — retrying in 5s..."
   sleep 5
@@ -34,7 +34,7 @@ echo ""
 echo "=========================================="
 echo "  Running seed (idempotent)"
 echo "=========================================="
-DATABASE_URL="$MIGRATE_URL" prisma db seed || echo "WARNING: Seed completed with warnings (non-fatal)"
+DATABASE_URL="$MIGRATE_URL" tsx /app/prisma/seed.ts || echo "WARNING: Seed completed with warnings (non-fatal)"
 
 echo ""
 echo "=========================================="

@@ -36,7 +36,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Install prisma CLI for migrations + seed at container startup
-RUN npm install -g prisma@7
+RUN npm install -g prisma@7 tsx
 
 COPY --from=builder /app/public ./public
 
@@ -46,9 +46,12 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Prisma schema + migrations needed for migrate deploy at runtime
+# Prisma schema needed for db push at runtime.
+# prisma.config.ts is NOT copied — it imports 'prisma/config' which is absent
+# from the standalone node_modules. Without prisma.config.ts the Prisma 7 CLI
+# falls back to DATABASE_URL from the environment (set to DIRECT_DATABASE_URL
+# in entrypoint.sh before running db push).
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
 # Entrypoint: migrate → seed → start
 COPY --chown=nextjs:nodejs scripts/entrypoint.sh ./entrypoint.sh
