@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { COURSE_CATEGORIES } from '@/config/courses';
 
 const PREVIEW_IMAGES = [
-  { src: '/images/students.jpg', alt: 'Students in a Digitika bootcamp', className: 'col-span-2 row-span-1' },
-  { src: '/images/coding.png', alt: 'Student coding', className: 'col-span-1 row-span-1' },
-  { src: '/images/illustrations/course-software.svg', alt: 'Software engineering course', className: 'col-span-1 row-span-1' },
+  { src: '/images/MUSICA%20HACKATHON/SPK_6504.jpg', alt: 'Instructor presenting at MUCISA Hackathon', className: 'col-span-2 row-span-1' },
+  { src: '/images/MUSICA%20HACKATHON/SPK_6506.jpg', alt: 'Students at MUCISA Hackathon', className: 'col-span-1 row-span-1' },
+  { src: '/images/MUSICA%20HACKATHON/SPK_6501.jpg', alt: 'Student coding at MUCISA Hackathon', className: 'col-span-1 row-span-1' },
 ];
 
 export function DigitikaTeaser() {

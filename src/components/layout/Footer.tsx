@@ -29,7 +29,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" aria-label="Codevertex IT Solutions" className="inline-block mb-5">
               <Image
-                src="/images/codevertex.png"
+                src="/images/logo.png"
                 alt="Codevertex IT Solutions"
                 width={160}
                 height={44}

@@ -1,23 +1,23 @@
 import Image from 'next/image';
-import { Quote } from 'lucide-react';
+import { Quote, ExternalLink } from 'lucide-react';
 
 const GALLERY_ITEMS = [
   {
-    src: '/images/students.jpg',
-    alt: 'Digitika Academy students in a coding bootcamp session',
-    caption: 'Real classrooms. Real projects. Real skills.',
+    src: '/images/MUSICA%20HACKATHON/SPK_6504.jpg',
+    alt: 'Instructor presenting at MUCISA Hackathon, Maseno University',
+    caption: 'MUCISA Hackathon — co-hosted with Maseno University under the Digitika programme',
     span: 'col-span-2',
   },
   {
-    src: '/images/coding.png',
-    alt: 'Student programming a web application',
-    caption: 'Hands-on every session',
+    src: '/images/MUSICA%20HACKATHON/SPK_6501.jpg',
+    alt: 'Student coding at MUCISA Hackathon in Codevertex t-shirt',
+    caption: 'Hands-on, every session',
     span: 'col-span-1',
   },
   {
-    src: '/images/team.jpg',
-    alt: 'Digitika Academy instructors and mentors',
-    caption: 'Instructors from the industry',
+    src: '/images/MUSICA%20HACKATHON/SPK_6502.jpg',
+    alt: 'Students collaborating with a mentor at the hackathon',
+    caption: 'Industry mentors on every project',
     span: 'col-span-1',
   },
 ];
@@ -92,6 +92,46 @@ export function LifeAtDigitika() {
                   <p className="text-sm font-bold text-foreground">Aisha K.</p>
                   <p className="text-xs text-muted-foreground">Code-Starter Graduate · Now at Safaricom PLC</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MUSICA Hackathon callout */}
+        <div className="mb-8 rounded-2xl overflow-hidden border border-border bg-card">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* Photos strip */}
+            <div className="grid grid-cols-3 h-52">
+              {[
+                { src: '/images/MUSICA%20HACKATHON/SPK_6501.jpg', alt: 'Student hacking at MUCISA' },
+                { src: '/images/MUSICA%20HACKATHON/SPK_6503.jpg', alt: 'Mentor guiding students' },
+                { src: '/images/MUSICA%20HACKATHON/SPK_6506.jpg', alt: 'Students networking' },
+              ].map(img => (
+                <div key={img.src} className="relative overflow-hidden">
+                  <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="200px" />
+                </div>
+              ))}
+            </div>
+            {/* Text */}
+            <div className="p-8 flex flex-col justify-center">
+              <div className="flex items-center gap-3 mb-4">
+                <Image
+                  src="/images/logo.png"
+                  alt="Digitika Academy"
+                  width={100}
+                  height={26}
+                  className="h-6 w-auto object-contain bg-black rounded px-1"
+                />
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">× Maseno University</span>
+              </div>
+              <h3 className="text-xl font-black text-foreground mb-3">MUCISA Hackathon</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                Codevertex co-hosted the MUCISA Hackathon with Maseno University Computer &amp; IT Students&apos; Association —
+                bringing together 120+ students to build real solutions to real problems, mentored by Digitika&apos;s industry practitioners.
+              </p>
+              <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                <ExternalLink className="h-3.5 w-3.5" />
+                A Digitika Academy flagship event · Kisumu, Kenya
               </div>
             </div>
           </div>

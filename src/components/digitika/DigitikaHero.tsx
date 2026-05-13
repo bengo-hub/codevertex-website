@@ -13,9 +13,21 @@ const STATS = [
 ];
 
 const GALLERY = [
-  { src: '/images/students.jpg', caption: 'Code-Starter bootcamp — learning by building real projects', alt: 'Students in class' },
-  { src: '/images/coding.png', caption: 'Hands-on programming sessions every week', alt: 'Student coding' },
-  { src: '/images/team.jpg', caption: 'Our instructors are industry practitioners, not just academics', alt: 'Digitika instructors' },
+  {
+    src: '/images/MUSICA%20HACKATHON/SPK_6501.jpg',
+    caption: 'MUCISA Hackathon — Codevertex × Maseno University, building real solutions under pressure',
+    alt: 'Student coding at MUCISA Hackathon in Codevertex t-shirt',
+  },
+  {
+    src: '/images/MUSICA%20HACKATHON/SPK_6503.jpg',
+    caption: 'Expert mentoring from industry practitioners — not just academics',
+    alt: 'Mentor explaining concept to students at hackathon',
+  },
+  {
+    src: '/images/MUSICA%20HACKATHON/SPK_6506.jpg',
+    caption: 'Building connections and skills that last beyond the classroom',
+    alt: 'Students networking at MUCISA Hackathon',
+  },
 ];
 
 const DISCIPLINES = [
@@ -38,8 +50,8 @@ export function DigitikaHero() {
     <section className="relative pt-20 pb-0 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden">
       {/* Background accents */}
       <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[600px] h-[400px] bg-primary/8 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-violet-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-150 h-100 bg-primary/8 rounded-full blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-87.5 h-87.5 bg-violet-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -100,7 +112,7 @@ export function DigitikaHero() {
           </div>
 
           {/* Right: image carousel */}
-          <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl shadow-primary/5 bg-card aspect-[4/3]">
+          <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl shadow-primary/5 bg-card aspect-4/3">
             {GALLERY.map((item, i) => (
               <div
                 key={item.src}
@@ -146,10 +158,22 @@ export function DigitikaHero() {
                 />
               ))}
             </div>
-            {/* Certification badge overlay */}
-            <div className="absolute top-4 right-4 flex flex-col gap-2">
-              <span className="px-3 py-1.5 rounded-full bg-primary/90 text-white text-xs font-bold shadow-lg">ICDL Certified</span>
-              <span className="px-3 py-1.5 rounded-full bg-card/90 border border-border text-foreground text-xs font-bold shadow-lg">Cisco Partner</span>
+            {/* Digitika logo + badges overlay */}
+            <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+              {/* Digitika Academy logo on dark surface */}
+              <div className="bg-black/70 backdrop-blur rounded-xl px-3 py-1.5 border border-white/10">
+                <Image
+                  src="/images/logo.png"
+                  alt="Digitika Academy — Learn | Innovate | Disrupt"
+                  width={110}
+                  height={28}
+                  className="h-6 w-auto object-contain"
+                />
+              </div>
+              <div className="flex flex-col gap-2 items-end">
+                <span className="px-3 py-1.5 rounded-full bg-primary/90 text-white text-xs font-bold shadow-lg">ICDL Certified</span>
+                <span className="px-3 py-1.5 rounded-full bg-black/70 backdrop-blur border border-white/10 text-white text-xs font-bold shadow-lg">Cisco Partner</span>
+              </div>
             </div>
           </div>
 

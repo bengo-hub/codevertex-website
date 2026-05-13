@@ -38,7 +38,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="shrink-0 group" aria-label="Codevertex IT Solutions">
             <Image
-              src="/images/codevertex.png"
+              src="/images/logo.png"
               alt="Codevertex IT Solutions"
               width={160}
               height={44}
