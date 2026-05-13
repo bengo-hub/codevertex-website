@@ -1,10 +1,21 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { consumeState } from '@/lib/auth/pkce';
 
-export default function AuthCallbackPage() {
+function Spinner() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+        <p className="text-sm text-muted-foreground">Signing you in…</p>
+      </div>
+    </div>
+  );
+}
+
+function CallbackInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const handled = useRef(false);
@@ -23,7 +34,6 @@ export default function AuthCallbackPage() {
       return;
     }
 
-    // Validate CSRF state
     const storedState = consumeState();
     if (storedState && storedState !== state) {
       router.replace('/');
@@ -38,12 +48,15 @@ export default function AuthCallbackPage() {
     });
   }, [searchParams, router, handleCallback]);
 
+  return <Spinner />;
+}
+
+// useSearchParams() must be inside a <Suspense> boundary in Next.js 15+.
+// Without it the page throws during static rendering and breaks the build.
+export default function AuthCallbackPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3">
-        <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-        <p className="text-sm text-muted-foreground">Signing you in…</p>
-      </div>
-    </div>
+    <Suspense fallback={<Spinner />}>
+      <CallbackInner />
+    </Suspense>
   );
 }

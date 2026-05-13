@@ -35,8 +35,14 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Install prisma CLI for migrations + seed at container startup
-RUN npm install -g prisma@7 tsx
+# Install CLI tools and seed runtime deps globally.
+# NODE_PATH (set below) exposes /usr/local/lib/node_modules to Node.js module
+# resolution. This is necessary because prisma/seed.ts is not a Next.js route —
+# its imports (@prisma/adapter-pg, pg) are never traced into standalone/node_modules
+# by Next.js file tracing. Global install + NODE_PATH is the only approach that
+# is guaranteed to work regardless of the standalone output structure.
+RUN npm install -g prisma@7 tsx @prisma/adapter-pg@7 pg@8
+ENV NODE_PATH=/usr/local/lib/node_modules
 
 COPY --from=builder /app/public ./public
 
@@ -46,16 +52,10 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# prisma/seed.ts is NOT a Next.js route — Next.js file tracing never picks up
-# its imports (@prisma/adapter-pg, pg). Install them explicitly so tsx can
-# resolve them when the entrypoint runs the seed at container startup.
-RUN npm install --no-save --prefix /app @prisma/adapter-pg@7 pg@8
-
 # Prisma schema needed for db push at runtime.
 # prisma.config.ts is NOT copied — it imports 'prisma/config' which is absent
 # from the standalone node_modules. Without prisma.config.ts the Prisma 7 CLI
-# falls back to DATABASE_URL from the environment (set to DIRECT_DATABASE_URL
-# in entrypoint.sh before running db push).
+# falls back to the --url flag passed in entrypoint.sh.
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 # Entrypoint: migrate → seed → start
