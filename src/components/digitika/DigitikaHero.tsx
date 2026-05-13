@@ -14,19 +14,24 @@ const STATS = [
 
 const GALLERY = [
   {
+    src: '/images/hub.jpg',
+    caption: 'Our Pioneer House computer lab — Lenovo workstations, fibre internet, professional environment',
+    alt: 'Codevertex IT Solutions computer lab in Kisumu with Lenovo computers',
+  },
+  {
+    src: '/images/students.jpg',
+    caption: 'Active cohorts every intake — small classes, focused learning, real projects',
+    alt: 'Digitika Academy students working on laptops in class',
+  },
+  {
     src: '/images/MUSICA%20HACKATHON/SPK_6501.jpg',
     caption: 'MUCISA Hackathon — Codevertex × Maseno University, building real solutions under pressure',
     alt: 'Student coding at MUCISA Hackathon in Codevertex t-shirt',
   },
   {
     src: '/images/MUSICA%20HACKATHON/SPK_6503.jpg',
-    caption: 'Expert mentoring from industry practitioners — not just academics',
+    caption: 'Industry mentors guiding students through real challenges — not just theory',
     alt: 'Mentor explaining concept to students at hackathon',
-  },
-  {
-    src: '/images/MUSICA%20HACKATHON/SPK_6506.jpg',
-    caption: 'Building connections and skills that last beyond the classroom',
-    alt: 'Students networking at MUCISA Hackathon',
   },
 ];
 

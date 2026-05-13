@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const CLIENTS = [
   { name: 'Maseno University (MUCISA)', detail: '120+ students upskilled in coding & digital entrepreneurship' },
   { name: 'Digital Economy ICT Initiative', detail: '200+ corporate staff trained under national programme' },
@@ -10,13 +12,36 @@ const ADVANTAGES = [
   { title: 'End-to-End Value Chain', desc: 'Software engineering, AI, cloud infrastructure, hosting, domains, and talent development — one true partner from MVP to scale.' },
   { title: 'Security & Compliance', desc: 'OAuth 2.0, OpenID Connect, AES-256 encryption, and secure-by-design principles at every layer of the stack.' },
   { title: 'Modular Scalability', desc: 'SSO-centric architecture enables rapid onboarding of new SaaS modules without disrupting existing client workflows.' },
-  { title: 'AI-Native Orientation', desc: 'Deep investment in generative AI and analytics positions clients for the intelligent economy — not just today\'s requirements.' },
+  { title: 'AI-Native Orientation', desc: "Deep investment in generative AI and analytics positions clients for the intelligent economy — not just today's requirements." },
 ];
 
 export function TrustSection() {
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-secondary/30">
       <div className="max-w-7xl mx-auto space-y-14">
+
+        {/* Team photo + pull quote */}
+        <div className="relative rounded-2xl overflow-hidden h-72 border border-border">
+          <Image
+            src="/images/team.jpg"
+            alt="Codevertex IT Solutions team at an event, wearing company t-shirts"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1280px) 100vw, 1280px"
+          />
+          <div className="absolute inset-0 bg-linear-to-r from-background/90 via-background/60 to-transparent" />
+          <div className="absolute inset-0 flex items-center px-10">
+            <div className="max-w-xl">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">The team</p>
+              <blockquote className="text-3xl sm:text-4xl font-black text-foreground leading-snug tracking-tight mb-4">
+                &ldquo;Built in Kisumu. Engineered for Africa. Designed for the world.&rdquo;
+              </blockquote>
+              <cite className="not-italic text-sm text-muted-foreground font-medium">
+                Codevertex IT Solutions — Pioneer House, Oginga Street, Kisumu
+              </cite>
+            </div>
+          </div>
+        </div>
 
         {/* Clients + Advantages */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -48,15 +73,38 @@ export function TrustSection() {
           </div>
         </div>
 
-        {/* Pull quote */}
-        <div className="max-w-3xl border-l-4 border-primary pl-8 py-2">
-          <blockquote className="text-2xl sm:text-3xl font-black text-foreground leading-snug tracking-tight mb-4">
-            &ldquo;Built in Kisumu. Engineered for Africa. Designed for the world.&rdquo;
-          </blockquote>
-          <cite className="not-italic text-sm text-muted-foreground font-medium">
-            Codevertex IT Solutions — Pioneer House, Oginga Street, Kisumu
-          </cite>
+        {/* Facility photo strip */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="relative rounded-2xl overflow-hidden h-48 md:col-span-2 border border-border">
+            <Image
+              src="/images/hub.jpg"
+              alt="Codevertex Pioneer House computer lab — Lenovo workstations and fibre internet"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 66vw"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-background/70 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4">
+              <p className="text-sm font-bold text-white">Pioneer House, Kisumu</p>
+              <p className="text-xs text-white/70">Our flagship training lab — fully equipped with Lenovo workstations</p>
+            </div>
+          </div>
+          <div className="relative rounded-2xl overflow-hidden h-48 border border-border">
+            <Image
+              src="/images/MUSICA%20HACKATHON/SPK_6506.jpg"
+              alt="Students at MUCISA Hackathon"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-background/70 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4">
+              <p className="text-sm font-bold text-white">MUCISA Hackathon</p>
+              <p className="text-xs text-white/70">Co-hosted with Maseno University</p>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
   );

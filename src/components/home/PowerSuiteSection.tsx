@@ -111,15 +111,14 @@ export function PowerSuiteSection() {
             className="lg:col-span-3 flex flex-col"
           >
             {/* Product illustration */}
-            <div className="relative w-full h-52 overflow-hidden bg-secondary/50 border-b border-border">
+            <div className="relative w-full h-64 overflow-hidden bg-[#0f1117] border-b border-border">
               <Image
                 src={SUITE[active].img}
                 alt={SUITE[active].name}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />
-              <div className="absolute inset-0 bg-linear-to-b from-transparent to-card/30" />
             </div>
 
             {/* Text content */}
