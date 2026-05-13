@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Codevertex Website — Build, Scan, Push & Deploy
-# Usage: ./build.sh
-# Mirrors the ordering-frontend build.sh pattern
+# Mirrors auth-api / ordering-backend deployment pattern.
+# DB migrations + seed run at container startup via scripts/entrypoint.sh
+# using DIRECT_DATABASE_URL (direct postgres, not pgbouncer).
 
 set -euo pipefail
 set +H
@@ -21,6 +22,10 @@ APP_NAME=${APP_NAME:-"codevertex-website"}
 NAMESPACE=${NAMESPACE:-"codevertex"}
 ENV_SECRET_NAME=${ENV_SECRET_NAME:-"codevertex-website-secrets"}
 DEPLOY=${DEPLOY:-true}
+SETUP_DATABASES=${SETUP_DATABASES:-false}
+DB_TYPES=${DB_TYPES:-postgres}
+SERVICE_DB_NAME=${SERVICE_DB_NAME:-codevertex}
+SERVICE_DB_USER=${SERVICE_DB_USER:-codevertex_user}
 
 REGISTRY_SERVER=${REGISTRY_SERVER:-docker.io}
 REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE:-codevertex}
@@ -55,13 +60,15 @@ fi
 
 log_success "Prerequisite checks passed"
 
-# Sync secrets from devops-k8s
+# =============================================================================
+# Auto-sync secrets from devops-k8s
+# =============================================================================
 if [[ ${DEPLOY} == "true" ]]; then
-  log_info "Syncing required secrets from devops-k8s..."
+  log_info "Checking and syncing required secrets from devops-k8s..."
   SYNC_SCRIPT=$(mktemp)
   if curl -fsSL https://raw.githubusercontent.com/Bengo-Hub/devops-k8s/main/scripts/tools/check-and-sync-secrets.sh -o "$SYNC_SCRIPT" 2>/dev/null; then
     source "$SYNC_SCRIPT"
-    check_and_sync_secrets "REGISTRY_USERNAME" "REGISTRY_PASSWORD" "GIT_TOKEN" || log_warn "Secret sync failed — continuing with existing secrets"
+    check_and_sync_secrets "REGISTRY_USERNAME" "REGISTRY_PASSWORD" "GIT_TOKEN" "POSTGRES_PASSWORD" "KUBE_CONFIG" || log_warn "Secret sync failed — continuing with existing secrets"
     rm -f "$SYNC_SCRIPT"
   else
     log_warn "Unable to download secret sync script — continuing with existing secrets"
@@ -93,7 +100,12 @@ log_success "Image pushed"
 
 if [[ -n ${KUBE_CONFIG:-} ]]; then
   mkdir -p ~/.kube
-  echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+  if echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config 2>/dev/null; then
+    log_info "KUBE_CONFIG decoded from base64"
+  else
+    echo "$KUBE_CONFIG" > ~/.kube/config
+    log_info "KUBE_CONFIG used as raw content"
+  fi
   chmod 600 ~/.kube/config
   export KUBECONFIG=~/.kube/config
 fi
@@ -115,24 +127,110 @@ if [[ -n ${REGISTRY_USERNAME:-} && -n ${REGISTRY_PASSWORD:-} ]]; then
     --dry-run=client -o yaml | kubectl apply -f - || log_warn "Registry secret creation failed"
 fi
 
-# Ensure app secret exists
-if ! kubectl -n "$NAMESPACE" get secret "$ENV_SECRET_NAME" >/dev/null 2>&1; then
-  log_warn "Secret $ENV_SECRET_NAME not found — creating placeholder"
-  kubectl -n "$NAMESPACE" create secret generic "$ENV_SECRET_NAME" \
-    --from-literal=databaseUrl="${DATABASE_URL:-}" \
-    --from-literal=anthropicApiKey="${ANTHROPIC_API_KEY:-}" \
-    --dry-run=client -o yaml | kubectl apply -f - || true
-fi
-
-# Clone devops-k8s and update Helm values
+# =============================================================================
+# Clone devops-k8s (needed for create-service-database + create-service-secrets)
+# =============================================================================
 if [[ ! -d "$DEVOPS_DIR" ]]; then
-  TOKEN="${GH_PAT:-}"
+  TOKEN="${GH_PAT:-${GIT_SECRET:-${GITHUB_TOKEN:-}}}"
   CLONE_URL="https://github.com/${DEVOPS_REPO}.git"
   [[ -n $TOKEN ]] && CLONE_URL="https://x-access-token:${TOKEN}@github.com/${DEVOPS_REPO}.git"
   git clone "$CLONE_URL" "$DEVOPS_DIR" || log_warn "Unable to clone devops repo"
 fi
 
-[[ -d "$DEVOPS_DIR" ]] || DEVOPS_DIR="$HOME/devops-k8s"
+# =============================================================================
+# Provision Postgres database (idempotent, skips if already exists)
+# =============================================================================
+if [[ "$SETUP_DATABASES" == "true" && -n "${KUBE_CONFIG:-}" ]]; then
+  if kubectl -n infra get statefulset postgresql >/dev/null 2>&1; then
+    log_info "Waiting for PostgreSQL to be ready..."
+    kubectl -n infra rollout status statefulset/postgresql --timeout=180s || log_warn "PostgreSQL not fully ready"
+
+    if [[ -d "$DEVOPS_DIR" && -f "$DEVOPS_DIR/scripts/infrastructure/create-service-database.sh" ]]; then
+      log_info "Provisioning database '${SERVICE_DB_NAME}' for ${APP_NAME}..."
+      SERVICE_DB_NAME="$SERVICE_DB_NAME" \
+      APP_NAME="$APP_NAME" \
+      NAMESPACE="$NAMESPACE" \
+      bash "$DEVOPS_DIR/scripts/infrastructure/create-service-database.sh" || log_warn "Database creation failed or already exists"
+    else
+      log_warn "create-service-database.sh not found — database should be created via devops-k8s infrastructure"
+    fi
+  else
+    log_warn "PostgreSQL not found in infra namespace — skipping database provisioning"
+  fi
+fi
+
+# =============================================================================
+# Upsert standardized service secrets (POSTGRES_URL, DATABASE_*, etc.)
+# =============================================================================
+if [[ -d "$DEVOPS_DIR" && -f "$DEVOPS_DIR/scripts/infrastructure/create-service-secrets.sh" ]]; then
+  log_info "Upserting secrets for ${APP_NAME}..."
+  export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
+  SERVICE_NAME="$APP_NAME" \
+  NAMESPACE="$NAMESPACE" \
+  DB_NAME="$SERVICE_DB_NAME" \
+  DB_USER="$SERVICE_DB_USER" \
+  SECRET_NAME="$ENV_SECRET_NAME" \
+  POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-}" \
+  bash "$DEVOPS_DIR/scripts/infrastructure/create-service-secrets.sh" || log_warn "Secret upsert failed"
+else
+  log_warn "create-service-secrets.sh not available — using existing cluster secrets"
+fi
+
+# =============================================================================
+# Patch secret with Prisma-specific keys:
+#   DATABASE_URL        → pgbouncer URL (?pgbouncer=true) for Next.js runtime
+#   DIRECT_DATABASE_URL → direct postgres URL for migrations (entrypoint.sh)
+#   ANTHROPIC_API_KEY   → Vera AI chatbot
+#
+# These keys supplement the Go-style POSTGRES_URL written by create-service-secrets.sh.
+# =============================================================================
+if [[ -n "${KUBE_CONFIG:-}" ]] && kubectl get ns "$NAMESPACE" >/dev/null 2>&1; then
+  log_info "Patching ${ENV_SECRET_NAME} with Prisma + AI keys..."
+
+  PG_DIRECT_HOST="postgresql.infra.svc.cluster.local"
+  PG_DIRECT_PORT="5432"
+  PG_BOUNCER_HOST="pgbouncer.infra.svc.cluster.local"
+  PG_BOUNCER_PORT="6432"
+
+  url_encode() {
+    python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1],safe=''))" "$1" 2>/dev/null \
+      || printf '%s' "$1" | sed 's/!/%21/g; s/@/%40/g; s/:/%3A/g; s|/|%2F|g; s/?/%3F/g; s/#/%23/g'
+  }
+
+  DB_PASS="${POSTGRES_PASSWORD:-}"
+  if [[ -z "$DB_PASS" ]] && kubectl get secret "$ENV_SECRET_NAME" -n "$NAMESPACE" >/dev/null 2>&1; then
+    DB_PASS=$(kubectl get secret "$ENV_SECRET_NAME" -n "$NAMESPACE" \
+      -o jsonpath="{.data.DATABASE_PASSWORD}" 2>/dev/null | base64 -d || echo "")
+  fi
+
+  ENCODED_PASS=$(url_encode "${DB_PASS}")
+
+  DATABASE_URL="postgresql://${SERVICE_DB_USER}:${ENCODED_PASS}@${PG_BOUNCER_HOST}:${PG_BOUNCER_PORT}/${SERVICE_DB_NAME}?pgbouncer=true&sslmode=disable"
+  DIRECT_DATABASE_URL="postgresql://${SERVICE_DB_USER}:${ENCODED_PASS}@${PG_DIRECT_HOST}:${PG_DIRECT_PORT}/${SERVICE_DB_NAME}?sslmode=disable"
+
+  PATCH_JSON='{"data":{'
+  PATCH_JSON+="\"DATABASE_URL\":\"$(echo -n "${DATABASE_URL}" | base64 -w0)\","
+  PATCH_JSON+="\"DIRECT_DATABASE_URL\":\"$(echo -n "${DIRECT_DATABASE_URL}" | base64 -w0)\""
+  [[ -n "${ANTHROPIC_API_KEY:-}" ]] && PATCH_JSON+=",\"ANTHROPIC_API_KEY\":\"$(echo -n "${ANTHROPIC_API_KEY}" | base64 -w0)\""
+  PATCH_JSON+='}}'
+
+  if kubectl get secret "$ENV_SECRET_NAME" -n "$NAMESPACE" >/dev/null 2>&1; then
+    kubectl patch secret "$ENV_SECRET_NAME" -n "$NAMESPACE" --type merge -p "$PATCH_JSON" \
+      && log_success "Patched ${ENV_SECRET_NAME} with DATABASE_URL / DIRECT_DATABASE_URL" \
+      || log_warn "Secret patch failed"
+  else
+    log_info "Creating ${ENV_SECRET_NAME} with Prisma keys..."
+    kubectl -n "$NAMESPACE" create secret generic "$ENV_SECRET_NAME" \
+      --from-literal=DATABASE_URL="${DATABASE_URL}" \
+      --from-literal=DIRECT_DATABASE_URL="${DIRECT_DATABASE_URL}" \
+      ${ANTHROPIC_API_KEY:+--from-literal=ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}"} \
+      --dry-run=client -o yaml | kubectl apply -f - || log_warn "Secret creation failed"
+  fi
+fi
+
+# =============================================================================
+# Update Helm values (image tag) via devops-k8s centralized script
+# =============================================================================
 source "${DEVOPS_DIR}/scripts/helm/update-values.sh" 2>/dev/null || true
 if declare -f update_helm_values >/dev/null 2>&1; then
   update_helm_values "$APP_NAME" "$GIT_COMMIT_ID" "$IMAGE_REPO"
@@ -141,3 +239,7 @@ else
 fi
 
 log_success "Deployment pipeline complete for ${APP_NAME}:${GIT_COMMIT_ID}"
+log_info "  Image     : ${IMAGE_REPO}:${GIT_COMMIT_ID}"
+log_info "  Namespace : ${NAMESPACE}"
+log_info "  Databases : ${SETUP_DATABASES} (${DB_TYPES})"
+log_info "Migrations + seed run at container startup via scripts/entrypoint.sh"
