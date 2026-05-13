@@ -115,7 +115,10 @@ export function Navbar() {
               alt="Codevertex IT Solutions"
               width={160}
               height={44}
-              className="h-9 w-auto object-contain dark:invert group-hover:opacity-90 transition-opacity"
+              className={cn(
+                'h-9 w-auto object-contain group-hover:opacity-90 transition-opacity',
+                scrolled ? 'dark:invert' : 'invert'
+              )}
               priority
             />
           </Link>
@@ -131,9 +134,13 @@ export function Navbar() {
                   href={link.href}
                   className={cn(
                     'px-3.5 py-2 rounded-lg text-sm font-medium transition-colors',
-                    isActive
-                      ? 'text-primary bg-primary/8'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
+                    scrolled
+                      ? isActive
+                        ? 'text-primary bg-primary/8'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
+                      : isActive
+                        ? 'text-white bg-white/10'
+                        : 'text-white/70 hover:text-white hover:bg-white/8'
                   )}
                 >
                   {link.label}

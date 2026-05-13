@@ -128,20 +128,23 @@ export function HeroSection() {
   const cur = SLIDES[slide];
 
   return (
-    <section className="relative min-h-screen flex items-center pt-16 overflow-hidden bg-[#050d1f]">
+    /*
+     * bg-foreground → dark navy in light mode, near-white in dark mode
+     * dark:bg-background → deep navy in dark mode (always dark in both themes)
+     */
+    <section className="relative min-h-screen flex items-start pt-16 overflow-hidden bg-foreground dark:bg-background">
       {/* Animated grid background */}
       <div className="absolute inset-0 grid-bg opacity-[0.07] pointer-events-none" />
 
-      {/* Glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-150 h-150 bg-violet-600/20 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      {/* Glow orbs — use primary tones so they adapt to the theme's accent color */}
+      <div className="absolute top-1/4 left-1/4 w-150 h-150 bg-primary/15 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
           {/* ── LEFT: Text content ── */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 pt-4">
 
             {/* Status pill */}
             <motion.div
@@ -149,7 +152,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-white/60 backdrop-blur-sm">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-background/5 dark:bg-foreground/5 border border-background/10 dark:border-foreground/10 text-xs font-bold text-background/60 dark:text-foreground/60 backdrop-blur-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 Kisumu, Kenya · Est. 2020 · Open for engagements
               </span>
@@ -162,14 +165,14 @@ export function HeroSection() {
               transition={{ delay: 0.1, duration: 0.5 }}
             >
               <h1 className="text-4xl sm:text-5xl lg:text-[3.35rem] xl:text-[3.75rem] font-black tracking-tight leading-[1.07]">
-                <span className="block text-white min-h-[1.2em]">
-                  {lines[0]}<span className="inline-block w-0.5 h-[0.85em] bg-white align-middle ml-0.5 animate-pulse" style={{ opacity: lines[0] === TAGLINES[0] ? 0 : 1 }} />
+                <span className="block text-background dark:text-foreground min-h-[1.2em]">
+                  {lines[0]}<span className="inline-block w-0.5 h-[0.85em] bg-background dark:bg-foreground align-middle ml-0.5 animate-pulse" style={{ opacity: lines[0] === TAGLINES[0] ? 0 : 1 }} />
                 </span>
                 <span className="block gradient-text min-h-[1.2em]">
                   {lines[1]}<span className="inline-block w-0.5 h-[0.85em] bg-primary align-middle ml-0.5 animate-pulse" style={{ opacity: lines[1] === TAGLINES[1] || (lines[0] !== TAGLINES[0]) ? 0 : 1 }} />
                 </span>
-                <span className="block text-white/40 min-h-[1.2em]">
-                  {lines[2]}<span className="inline-block w-0.5 h-[0.85em] bg-white/40 align-middle ml-0.5 animate-pulse" style={{ opacity: lines[2] === TAGLINES[2] || lines[1] !== TAGLINES[1] ? 0 : 1 }} />
+                <span className="block text-background/40 dark:text-foreground/40 min-h-[1.2em]">
+                  {lines[2]}<span className="inline-block w-0.5 h-[0.85em] bg-background/40 dark:bg-foreground/40 align-middle ml-0.5 animate-pulse" style={{ opacity: lines[2] === TAGLINES[2] || lines[1] !== TAGLINES[1] ? 0 : 1 }} />
                 </span>
               </h1>
             </motion.div>
@@ -179,7 +182,7 @@ export function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="text-base sm:text-lg text-white/50 leading-relaxed max-w-md"
+              className="text-base sm:text-lg text-background/55 dark:text-foreground/55 leading-relaxed max-w-md"
             >
               Codevertex builds the integrated digital infrastructure East African businesses
               need — bespoke software, AI analytics, cloud hosting, and the talent to run it all.
@@ -195,10 +198,20 @@ export function HeroSection() {
               <Button size="lg" asChild>
                 <Link href="/contact">Start a project <ArrowRight className="h-4 w-4" /></Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/30" asChild>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-background/20 dark:border-foreground/20 text-background dark:text-foreground bg-background/5 dark:bg-foreground/5 hover:bg-background/10 dark:hover:bg-foreground/10 hover:border-background/30 dark:hover:border-foreground/30"
+                asChild
+              >
                 <Link href="/services">View products <ChevronRight className="h-4 w-4" /></Link>
               </Button>
-              <Link href={SSO_URL} target="_blank" rel="noreferrer" className="text-sm font-semibold text-white/40 hover:text-white/80 transition-colors">
+              <Link
+                href={SSO_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm font-semibold text-background/40 dark:text-foreground/40 hover:text-background/80 dark:hover:text-foreground/80 transition-colors"
+              >
                 Client portal →
               </Link>
             </motion.div>
@@ -208,12 +221,12 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.72, duration: 0.5 }}
-              className="grid grid-cols-4 gap-px bg-white/10 rounded-2xl overflow-hidden border border-white/10 mt-2"
+              className="grid grid-cols-4 gap-px bg-background/10 dark:bg-foreground/10 rounded-2xl overflow-hidden border border-background/10 dark:border-foreground/10 mt-2"
             >
               {STATS.map((s) => (
-                <div key={s.label} className="bg-white/5 backdrop-blur-sm px-3 py-4 text-center">
+                <div key={s.label} className="bg-background/5 dark:bg-foreground/5 backdrop-blur-sm px-3 py-4 text-center">
                   <div className="text-xl sm:text-2xl font-black text-primary tracking-tight">{s.value}</div>
-                  <div className="text-[10px] text-white/40 mt-1 font-medium leading-snug">{s.label}</div>
+                  <div className="text-[10px] text-background/40 dark:text-foreground/40 mt-1 font-medium leading-snug">{s.label}</div>
                 </div>
               ))}
             </motion.div>
@@ -225,11 +238,11 @@ export function HeroSection() {
               transition={{ delay: 0.85, duration: 0.4 }}
               className="flex flex-wrap items-center gap-x-3 gap-y-1"
             >
-              <span className="text-[11px] font-semibold text-white/30">Trusted by</span>
+              <span className="text-[11px] font-semibold text-background/30 dark:text-foreground/30">Trusted by</span>
               {['Maseno University', 'Danka Africa', 'KCA University', 'Digital Economy ICT'].map((name, i, arr) => (
                 <span key={name} className="flex items-center gap-3">
-                  <span className="text-[11px] font-bold text-white/60">{name}</span>
-                  {i < arr.length - 1 && <span className="text-white/20 text-xs">·</span>}
+                  <span className="text-[11px] font-bold text-background/60 dark:text-foreground/60">{name}</span>
+                  {i < arr.length - 1 && <span className="text-background/20 dark:text-foreground/20 text-xs">·</span>}
                 </span>
               ))}
             </motion.div>
@@ -243,13 +256,13 @@ export function HeroSection() {
             className="flex flex-col gap-4"
           >
             {/* Main product card */}
-            <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden shadow-2xl shadow-black/40">
-              {/* Illustration area */}
-              <div className="relative w-full bg-[#0a1020]" style={{ height: 320 }}>
-                {/* Subtle inner glow matching product color */}
+            <div className="relative rounded-2xl border border-background/10 dark:border-foreground/10 bg-background/5 dark:bg-foreground/5 backdrop-blur-sm overflow-hidden shadow-2xl shadow-black/40">
+              {/* Illustration area — fills card completely */}
+              <div className="relative w-full aspect-video bg-foreground/80 dark:bg-background/80">
+                {/* Product color glow */}
                 <div
-                  className="absolute inset-0 transition-opacity duration-700"
-                  style={{ background: `radial-gradient(ellipse at 60% 40%, ${cur.color}18, transparent 65%)` }}
+                  className="absolute inset-0 transition-opacity duration-700 z-10"
+                  style={{ background: `radial-gradient(ellipse at 60% 40%, ${cur.color}20, transparent 65%)` }}
                 />
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -272,10 +285,10 @@ export function HeroSection() {
                 </AnimatePresence>
 
                 {/* Top-right product badge */}
-                <div className="absolute top-4 right-4 z-10">
+                <div className="absolute top-4 right-4 z-20">
                   <span
-                    className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border"
-                    style={{ color: cur.color, borderColor: `${cur.color}40`, background: `${cur.color}15` }}
+                    className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border backdrop-blur-sm"
+                    style={{ color: cur.color, borderColor: `${cur.color}40`, background: `${cur.color}20` }}
                   >
                     {cur.tag}
                   </span>
@@ -290,13 +303,13 @@ export function HeroSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.35 }}
-                  className="px-6 py-5 flex items-center justify-between gap-4 border-t border-white/8"
+                  className="px-6 py-5 flex items-center justify-between gap-4 border-t border-background/10 dark:border-foreground/10"
                 >
                   <div>
-                    <h3 className="text-base font-black text-white mb-1.5">{cur.product}</h3>
+                    <h3 className="text-base font-black text-background dark:text-foreground mb-1.5">{cur.product}</h3>
                     <ul className="flex flex-col gap-1">
                       {cur.highlights.map(h => (
-                        <li key={h} className="flex items-center gap-2 text-xs text-white/50">
+                        <li key={h} className="flex items-center gap-2 text-xs text-background/50 dark:text-foreground/50">
                           <CheckCircle className="h-3 w-3 shrink-0" style={{ color: cur.color }} />
                           {h}
                         </li>
@@ -330,7 +343,13 @@ export function HeroSection() {
                   }}
                   aria-label={s.product}
                 >
-                  <Image src={s.img} alt={s.product} fill className="object-cover bg-[#0a1020]" sizes="40px" />
+                  <Image
+                    src={s.img}
+                    alt={s.product}
+                    fill
+                    className="object-cover"
+                    sizes="40px"
+                  />
                 </button>
               ))}
             </div>
