@@ -1,0 +1,31 @@
+import Image from 'next/image';
+import { ALUMNI_COMPANIES } from '@/config/courses';
+
+export function AlumniBar() {
+  return (
+    <section className="py-10 px-4 sm:px-6 lg:px-8 border-b border-border bg-card">
+      <div className="max-w-7xl mx-auto">
+        <p className="text-xs font-bold uppercase tracking-widest text-center text-muted-foreground mb-6">
+          Our graduates now work at
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+          {ALUMNI_COMPANIES.map((company) => (
+            <div
+              key={company.name}
+              className="flex items-center justify-center w-32 h-12 rounded-lg bg-background border border-border px-3 py-2 hover:border-primary/30 hover:shadow-sm transition-all duration-200"
+              title={company.name}
+            >
+              <Image
+                src={company.logo}
+                alt={company.name}
+                width={110}
+                height={36}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

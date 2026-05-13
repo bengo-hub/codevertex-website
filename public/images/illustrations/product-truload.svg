@@ -1,0 +1,63 @@
+<svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Sky background -->
+  <rect width="400" height="280" rx="16" fill="#0f1117"/>
+  <!-- Road -->
+  <rect x="0" y="220" width="400" height="60" fill="#1a1d2e"/>
+  <rect x="0" y="218" width="400" height="4" fill="#2d3a5a"/>
+  <!-- Road markings -->
+  <rect x="30" y="246" width="40" height="4" rx="2" fill="#3d4a6a" opacity="0.6"/>
+  <rect x="100" y="246" width="40" height="4" rx="2" fill="#3d4a6a" opacity="0.6"/>
+  <rect x="170" y="246" width="40" height="4" rx="2" fill="#3d4a6a" opacity="0.6"/>
+  <rect x="240" y="246" width="40" height="4" rx="2" fill="#3d4a6a" opacity="0.6"/>
+  <rect x="310" y="246" width="40" height="4" rx="2" fill="#3d4a6a" opacity="0.6"/>
+  <!-- Truck body -->
+  <rect x="80" y="150" width="200" height="70" rx="6" fill="#1e2d5e"/>
+  <rect x="80" y="150" width="200" height="4" fill="#2d4a9e" opacity="0.8"/>
+  <!-- Truck cabin -->
+  <rect x="250" y="140" width="80" height="80" rx="8" fill="#253168"/>
+  <!-- Cabin window -->
+  <rect x="260" y="150" width="55" height="35" rx="4" fill="#4a9af5" opacity="0.4"/>
+  <rect x="260" y="150" width="55" height="2" fill="#4a9af5" opacity="0.6"/>
+  <!-- Truck wheels -->
+  <circle cx="120" cy="225" r="20" fill="#111420"/>
+  <circle cx="120" cy="225" r="13" fill="#1e2540"/>
+  <circle cx="120" cy="225" r="6" fill="#4a9af5" opacity="0.5"/>
+  <circle cx="200" cy="225" r="20" fill="#111420"/>
+  <circle cx="200" cy="225" r="13" fill="#1e2540"/>
+  <circle cx="200" cy="225" r="6" fill="#4a9af5" opacity="0.5"/>
+  <circle cx="295" cy="225" r="20" fill="#111420"/>
+  <circle cx="295" cy="225" r="13" fill="#1e2540"/>
+  <circle cx="295" cy="225" r="6" fill="#4a9af5" opacity="0.5"/>
+  <!-- Axle scale sensor -->
+  <rect x="100" y="215" width="220" height="6" rx="3" fill="#4a9af5" opacity="0.3"/>
+  <!-- IoT sensor on truck top -->
+  <rect x="160" y="132" width="60" height="20" rx="4" fill="#253168" stroke="#4a9af5" stroke-width="1.5"/>
+  <circle cx="180" cy="142" r="4" fill="#4a9af5"/>
+  <circle cx="180" cy="142" r="2" fill="#fff" opacity="0.8"/>
+  <!-- Signal waves -->
+  <path d="M 190 136 Q 200 130 210 136" stroke="#4a9af5" stroke-width="1.5" opacity="0.4"/>
+  <path d="M 187 131 Q 200 122 213 131" stroke="#4a9af5" stroke-width="1.5" opacity="0.3"/>
+  <path d="M 184 126 Q 200 114 216 126" stroke="#4a9af5" stroke-width="1.5" opacity="0.2"/>
+  <!-- Weight data panel -->
+  <rect x="26" y="40" width="160" height="100" rx="10" fill="#141928" stroke="#2d3a5e" stroke-width="1.5"/>
+  <text x="106" y="58" font-family="monospace" font-size="9" fill="#4a9af5" text-anchor="middle" opacity="0.8">AXLE MONITOR</text>
+  <rect x="36" y="64" width="140" height="1" fill="#2d3a5e"/>
+  <!-- Weight readings -->
+  <text x="46" y="82" font-family="monospace" font-size="8" fill="#8892b0">Axle 1</text>
+  <text x="150" y="82" font-family="monospace" font-size="9" fill="#4ade80" text-anchor="end">8.2 t</text>
+  <text x="46" y="98" font-family="monospace" font-size="8" fill="#8892b0">Axle 2</text>
+  <text x="150" y="98" font-family="monospace" font-size="9" fill="#4ade80" text-anchor="end">9.1 t</text>
+  <text x="46" y="114" font-family="monospace" font-size="8" fill="#8892b0">Total</text>
+  <text x="150" y="114" font-family="monospace" font-size="9" fill="#facc15" text-anchor="end">17.3 t</text>
+  <!-- Compliance badge -->
+  <rect x="42" y="120" width="128" height="14" rx="7" fill="#15803d" opacity="0.3"/>
+  <rect x="42" y="120" width="128" height="14" rx="7" stroke="#4ade80" stroke-width="1"/>
+  <text x="106" y="130" font-family="monospace" font-size="8" fill="#4ade80" text-anchor="middle">✓ WITHIN LEGAL LIMIT</text>
+  <!-- Camera icon top right -->
+  <rect x="310" y="40" width="70" height="50" rx="8" fill="#141928" stroke="#2d3a5e" stroke-width="1.5"/>
+  <rect x="320" y="50" width="40" height="28" rx="4" fill="#1e2d5e"/>
+  <circle cx="340" cy="64" r="8" fill="#253168"/>
+  <circle cx="340" cy="64" r="5" fill="#4a9af5" opacity="0.4"/>
+  <rect x="356" y="60" width="8" height="8" rx="2" fill="#1e2d5e" stroke="#4a9af5" stroke-width="1"/>
+  <text x="345" y="105" font-family="monospace" font-size="8" fill="#8892b0" text-anchor="middle">LIVE FEED</text>
+</svg>
