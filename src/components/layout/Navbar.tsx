@@ -3,17 +3,91 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { cn } from '@/lib/utils';
 import { NAV_LINKS, SSO_URL } from '@/lib/constants';
+import { useAuth } from '@/hooks/use-auth';
+
+function UserMenu() {
+  const { user, logout } = useAuth();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const initials = (user?.name || user?.email || 'U')
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  const displayName = user?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'Account';
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2 h-9 pl-2 pr-3 rounded-full bg-primary/10 hover:bg-primary/15 transition-colors"
+      >
+        <span className="h-6 w-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+          {initials}
+        </span>
+        <span className="text-sm font-medium text-foreground hidden sm:inline">{displayName}</span>
+        <ChevronDown className={cn('h-3.5 w-3.5 text-muted-foreground transition-transform', open && 'rotate-180')} />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
+            transition={{ duration: 0.12 }}
+            className="absolute right-0 top-11 w-52 rounded-xl bg-background border border-border shadow-lg py-1 z-50"
+          >
+            <div className="px-3 py-2 border-b border-border">
+              <p className="text-xs font-semibold text-foreground truncate">{user?.name || displayName}</p>
+              {user?.email && <p className="text-xs text-muted-foreground truncate">{user.email}</p>}
+            </div>
+            <Link
+              href={SSO_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
+            >
+              <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
+              Dashboard
+            </Link>
+            <button
+              onClick={() => { setOpen(false); logout(); }}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/8 transition-colors"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isAuthenticated, isLoading, login, logout } = useAuth();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 16);
@@ -21,7 +95,6 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => setMobileOpen(false), [pathname]);
 
   return (
@@ -72,14 +145,21 @@ export function Navbar() {
           {/* Right actions */}
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Link
-              href={SSO_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex h-9 px-5 rounded-full bg-primary text-primary-foreground text-sm font-bold items-center gap-1.5 shadow-primary hover:shadow-primary-lg hover:-translate-y-0.5 transition-all duration-200"
-            >
-              Dashboard
-            </Link>
+
+            {/* Auth button — hidden while loading to avoid flash */}
+            {!isLoading && (
+              isAuthenticated
+                ? <UserMenu />
+                : (
+                  <button
+                    onClick={() => login(pathname)}
+                    className="hidden sm:inline-flex h-9 px-5 rounded-full bg-primary text-primary-foreground text-sm font-bold items-center gap-1.5 shadow-primary hover:shadow-primary-lg hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    Sign In
+                  </button>
+                )
+            )}
+
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -118,14 +198,35 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href={SSO_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 flex h-11 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-primary"
-              >
-                Go to Dashboard →
-              </Link>
+              {!isLoading && (
+                isAuthenticated
+                  ? (
+                    <>
+                      <Link
+                        href={SSO_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 flex h-11 items-center justify-center rounded-full bg-secondary text-foreground text-sm font-bold"
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={() => logout()}
+                        className="mt-1 flex h-11 items-center justify-center rounded-full border border-destructive text-destructive text-sm font-bold"
+                      >
+                        Sign out
+                      </button>
+                    </>
+                  )
+                  : (
+                    <button
+                      onClick={() => login(pathname)}
+                      className="mt-2 flex h-11 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-primary"
+                    >
+                      Sign In →
+                    </button>
+                  )
+              )}
             </div>
           </motion.div>
         )}

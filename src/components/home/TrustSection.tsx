@@ -26,7 +26,7 @@ export function TrustSection() {
             src="/images/team.jpg"
             alt="Codevertex IT Solutions team at an event, wearing company t-shirts"
             fill
-            className="object-cover object-top"
+            className="object-cover object-[center_50%]"
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-black/20" />

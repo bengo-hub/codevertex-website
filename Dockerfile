@@ -46,6 +46,11 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# prisma/seed.ts is NOT a Next.js route — Next.js file tracing never picks up
+# its imports (@prisma/adapter-pg, pg). Install them explicitly so tsx can
+# resolve them when the entrypoint runs the seed at container startup.
+RUN npm install --no-save --prefix /app @prisma/adapter-pg@7 pg@8
+
 # Prisma schema needed for db push at runtime.
 # prisma.config.ts is NOT copied — it imports 'prisma/config' which is absent
 # from the standalone node_modules. Without prisma.config.ts the Prisma 7 CLI
