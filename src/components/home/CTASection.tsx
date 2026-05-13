@@ -10,7 +10,7 @@ export function CTASection() {
         <div className="relative rounded-3xl bg-foreground border border-border/20 overflow-hidden">
           {/* Glow accents */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-violet-500/15 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-primary/15 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left: text + CTAs */}

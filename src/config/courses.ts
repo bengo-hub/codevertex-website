@@ -488,7 +488,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     id: 'ai',
     name: 'Artificial Intelligence',
     tagline: 'From Fundamentals to LLM Engineering',
-    description: 'The most in-demand AI skills of 2025. Learn to build, deploy and monetise AI solutions.',
+    description: 'The most in-demand AI skills since 2025. Learn to build, deploy and monetise AI solutions.',
     color: '#8B5CF6',
     courses: [
       {

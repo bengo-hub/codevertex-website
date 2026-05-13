@@ -17,14 +17,14 @@ const JOBS = [
 export default function CareersPage() {
   return (
     <div className="pt-16">
-      <section className="bg-slate-900 dark:bg-slate-950 pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-foreground pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Careers</p>
-          <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tight leading-[1.05] mb-4">
-            Build Africa's digital future.
+          <h1 className="text-5xl sm:text-6xl font-black text-background tracking-tight leading-[1.05] mb-4">
+            Build Africa&apos;s digital future.
           </h1>
-          <p className="text-slate-300 text-lg max-w-xl leading-relaxed">
-            Join a purpose-driven team building the infrastructure for Africa's digital economy.
+          <p className="text-background/70 text-lg max-w-xl leading-relaxed">
+            Join a purpose-driven team building the infrastructure for Africa&apos;s digital economy.
           </p>
         </div>
       </section>

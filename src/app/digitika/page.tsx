@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { DigitikaHero } from '@/components/digitika/DigitikaHero';
 import { AlumniBar } from '@/components/digitika/AlumniBar';
-import { ProgrammeHighlights } from '@/components/digitika/ProgrammeHighlights';
 import { LifeAtDigitika } from '@/components/digitika/LifeAtDigitika';
 import { TestimonialsSection } from '@/components/digitika/TestimonialsSection';
 import { CourseCatalog } from '@/components/digitika/CourseCatalog';
@@ -21,7 +20,6 @@ export default function DigitikaPage() {
     <>
       <DigitikaHero />
       <AlumniBar />
-      <ProgrammeHighlights />
       <LifeAtDigitika />
       <TestimonialsSection />
       <CourseCatalog />

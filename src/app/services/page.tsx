@@ -19,7 +19,7 @@ export default function ServicesPage() {
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="bg-foreground pt-20 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-125 h-125 bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-violet-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="max-w-3xl">
             <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Full Stack · AI · Cloud · Training</p>
@@ -81,12 +81,12 @@ export default function ServicesPage() {
                   )}
                 >
                   {/* Illustration - full width, dark background */}
-                  <div className="relative w-full bg-[#080b12] overflow-hidden" style={{ height: 160 }}>
+                  <div className="relative w-full bg-muted/50 dark:bg-[#080b12] overflow-hidden" style={{ height: 160 }}>
                     <Image
                       src={product.img}
                       alt={product.name}
                       fill
-                      className="object-contain group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     {/* Color tint overlay */}
@@ -143,12 +143,12 @@ export default function ServicesPage() {
                   <div className={cn('grid grid-cols-1 lg:grid-cols-2', isReversed && 'lg:flex lg:flex-row-reverse')}>
 
                     {/* Illustration — fills entire left/right half */}
-                    <div className="relative bg-[#080b12] overflow-hidden" style={{ minHeight: 260 }}>
+                    <div className="relative bg-muted/50 dark:bg-[#080b12] overflow-hidden" style={{ minHeight: 260 }}>
                       <Image
                         src={pillar.img}
                         alt={pillar.name}
                         fill
-                        className="object-contain group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                       <div

@@ -101,4 +101,17 @@
   .glass {
     @apply backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border border-border;
   }
+
+  /* Infinite marquee carousel */
+  .animate-marquee {
+    animation: marquee 25s linear infinite;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.333%); }
 }

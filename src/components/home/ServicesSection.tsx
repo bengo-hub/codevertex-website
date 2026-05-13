@@ -1,85 +1,133 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { POWER_SUITE, STATUS_STYLES, type PowerSuiteProduct } from '@/config/services';
-import { cn } from '@/lib/utils';
-
-function ServiceCard({ service, index }: { service: PowerSuiteProduct; index: number }) {
-  const Icon = service.icon;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: index * 0.04, duration: 0.45 }}
-      className="h-full"
-    >
-      <Link
-        href={service.url}
-        target="_blank"
-        rel="noreferrer"
-        className={cn(
-          'group flex flex-col h-full p-6 rounded-2xl bg-card border border-border',
-          'hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1',
-          'transition-all duration-300',
-          (service.status === 'coming-soon' || service.status === 'offline') && 'opacity-60 pointer-events-none'
-        )}
-      >
-        {/* Icon + status */}
-        <div className="flex items-start justify-between mb-5">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-muted to-secondary flex items-center justify-center border border-border group-hover:border-primary/20 group-hover:scale-110 transition-all duration-300">
-            <Icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-          </div>
-          <span className={cn('px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border', STATUS_STYLES[service.status])}>
-            {service.status.replace('-', ' ')}
-          </span>
-        </div>
-
-        <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-          {service.name}
-        </h3>
-        <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-5">
-          {service.description}
-        </p>
-        <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground group-hover:text-primary transition-colors pt-4 border-t border-border mt-auto">
-          Launch application
-          <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-        </div>
-      </Link>
-    </motion.div>
-  );
-}
+import { SERVICE_PILLARS } from '@/config/services';
 
 export function ServicesSection() {
-  const filtered = POWER_SUITE;
-
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden">
+      {/* Magic grid lines background */}
+      <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
+      {/* Radial fade — keeps edges clean */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_60%,hsl(var(--background))_100%)] pointer-events-none" />
+      {/* Subtle glow accent */}
+      <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-150 h-100 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
-          <div className="max-w-xl">
-            <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">Power Suite</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-foreground leading-tight tracking-tight mb-4">
-              Every tool your business needs.
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-14"
+        >
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">What we do</p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="text-4xl sm:text-5xl font-black text-foreground tracking-tight leading-tight">
+              Six specializations.<br className="hidden sm:block" /> One partner.
             </h2>
-            <p className="text-muted-foreground text-lg font-medium leading-relaxed">
-              Composable microservices communicating seamlessly through one SSO identity layer.
+            <p className="text-muted-foreground text-base max-w-xs leading-relaxed">
+              From cloud infrastructure to AI analytics, software to security — everything Africa&apos;s most ambitious organisations need.
             </p>
           </div>
+        </motion.div>
 
-          <div className="flex items-center gap-3">
-            <Link href="/services" className="h-9 px-5 rounded-full text-xs font-bold bg-secondary text-muted-foreground border border-border hover:border-primary/30 transition-all inline-flex items-center gap-1.5">
-              View all services <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
+        {/* Bento grid — gap-px on bg-border creates the "magic grid lines" */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border shadow-sm">
+          {SERVICE_PILLARS.map((pillar, i) => {
+            const Icon = pillar.icon;
+            return (
+              <motion.div
+                key={pillar.id}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07, duration: 0.4 }}
+                className="group relative bg-card hover:bg-secondary/30 transition-colors duration-300"
+              >
+                <Link
+                  href={pillar.cta?.href || '/services'}
+                  className="flex flex-col h-full min-h-75"
+                >
+                  {/* Illustration panel */}
+                  <div className="relative w-full h-40 overflow-hidden bg-muted dark:bg-[#080b12] shrink-0">
+                    <Image
+                      src={pillar.img}
+                      alt={pillar.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ background: `radial-gradient(ellipse at center, ${pillar.color}18, transparent 70%)` }}
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
+                        style={{ background: `${pillar.color}15`, border: `1.5px solid ${pillar.color}25` }}
+                      >
+                        <Icon className="h-4 w-4" style={{ color: pillar.color }} />
+                      </div>
+                      <div>
+                        <h3 className="font-black text-foreground text-sm leading-snug group-hover:text-primary transition-colors">
+                          {pillar.name}
+                        </h3>
+                        <p className="text-[11px] text-muted-foreground italic mt-0.5 leading-snug">{pillar.tagline}</p>
+                      </div>
+                    </div>
+
+                    <ul className="flex-1 flex flex-col gap-1.5 mb-4">
+                      {pillar.features.slice(0, 3).map((f) => (
+                        <li key={f} className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="w-1 h-1 rounded-full shrink-0" style={{ background: pillar.color }} />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div
+                      className="flex items-center gap-1 text-xs font-bold mt-auto"
+                      style={{ color: pillar.color }}
+                    >
+                      {pillar.cta?.label || 'Learn more'}
+                      <ArrowRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+                    </div>
+                  </div>
+
+                  {/* Bottom accent line on hover */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: `linear-gradient(90deg, transparent, ${pillar.color}, transparent)` }}
+                  />
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filtered.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="mt-8 flex justify-center"
+        >
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-muted-foreground hover:text-primary transition-colors"
+          >
+            View Power Suite products & full service detail
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

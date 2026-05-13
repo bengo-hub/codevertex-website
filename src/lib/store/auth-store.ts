@@ -41,7 +41,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-      status: 'loading',
+      status: 'idle',
       user: null,
       session: null,
       accessToken: null,

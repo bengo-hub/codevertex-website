@@ -56,7 +56,7 @@ export function DigitikaHero() {
       {/* Background accents */}
       <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
       <div className="absolute top-0 right-0 w-150 h-100 bg-primary/8 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-87.5 h-87.5 bg-violet-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-87.5 h-87.5 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">

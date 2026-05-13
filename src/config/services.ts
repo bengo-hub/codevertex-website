@@ -188,6 +188,17 @@ export const SERVICE_PILLARS: ServicePillar[] = [
     features: ['Managed cloud with automated backups', 'Disaster recovery planning', 'AES-256 encryption end-to-end', 'Domain provisioning (.co.ke, .com, .africa)', 'SSL certificate management', 'Multi-region CDN and failover'],
     cta: { label: 'Talk to infrastructure team', href: '/contact' },
   },
+  {
+    id: 'cybersec',
+    name: 'Cybersecurity & Audit',
+    tagline: 'Protecting Enterprises from Evolving Threats',
+    description: 'Comprehensive security assessments, penetration testing, vulnerability auditing, and compliance frameworks that safeguard critical infrastructure, sensitive data, and business continuity.',
+    icon: Shield,
+    color: '#ef4444',
+    img: '/images/illustrations/service-cybersec.svg',
+    features: ['Penetration testing & ethical hacking', 'Vulnerability assessment & audit', 'Security architecture review', 'OWASP / ISO 27001 compliance', 'Incident response planning', 'Security awareness training'],
+    cta: { label: 'Request a security audit', href: '/contact' },
+  },
 ];
 
 // Legacy compat: kept for any existing imports
