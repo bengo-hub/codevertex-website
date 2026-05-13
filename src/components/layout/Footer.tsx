@@ -116,7 +116,6 @@ export function Footer() {
                 { label: 'About Us', href: '/about' },
                 { label: 'Blog', href: '/blog' },
                 { label: 'Careers', href: '/careers' },
-                { label: 'Pricing', href: '/pricing' },
                 { label: 'Contact', href: '/contact' },
               ].map((l) => (
                 <li key={l.href}>

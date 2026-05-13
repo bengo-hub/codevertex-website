@@ -12,15 +12,15 @@ export function AlumniBar() {
           {ALUMNI_COMPANIES.map((company) => (
             <div
               key={company.name}
-              className="flex items-center justify-center w-32 h-12 rounded-lg bg-background border border-border px-3 py-2 hover:border-primary/30 hover:shadow-sm transition-all duration-200"
+              className="flex items-center justify-center w-44 h-16 rounded-xl bg-background border border-border px-4 py-3 hover:border-primary/30 hover:shadow-sm transition-all duration-200"
               title={company.name}
             >
               <Image
                 src={company.logo}
                 alt={company.name}
-                width={110}
-                height={36}
-                className="h-7 w-auto object-contain"
+                width={140}
+                height={48}
+                className="h-10 w-auto object-contain"
               />
             </div>
           ))}

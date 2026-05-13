@@ -12,6 +12,7 @@ interface Props {
 
 export function CourseCard({ course, category }: Props) {
   const cover = course.coverImage ?? COURSE_COVER_IMAGES[course.id];
+  const isSvg = cover?.endsWith('.svg');
 
   return (
     <Link
@@ -20,12 +21,12 @@ export function CourseCard({ course, category }: Props) {
     >
       {/* Cover image */}
       {cover ? (
-        <div className="relative h-40 w-full overflow-hidden bg-secondary">
+        <div className={`relative h-44 w-full overflow-hidden ${isSvg ? 'bg-[#0d1117]' : 'bg-secondary'}`}>
           <Image
             src={cover}
             alt={course.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className={isSvg ? 'object-contain p-2' : 'object-cover group-hover:scale-105 transition-transform duration-300'}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           />
           {/* Category color strip overlay */}

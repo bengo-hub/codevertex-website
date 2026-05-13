@@ -137,6 +137,8 @@ export function HeroSection() {
       <div className="absolute right-0 top-0 bottom-0 w-[52%] hidden lg:block">
         {/* Left fade gradient blending into page background */}
         <div className="absolute inset-y-0 left-0 w-56 bg-linear-to-r from-background via-background/70 to-transparent z-20 pointer-events-none" />
+        {/* Top fade — keeps navbar area readable in light mode */}
+        <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-background via-background/60 to-transparent z-20 pointer-events-none" />
 
         {/* Dark illustration background */}
         <div className="absolute inset-0 bg-[#080b12]" />

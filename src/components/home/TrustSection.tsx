@@ -29,7 +29,7 @@ export function TrustSection() {
             className="object-cover object-top"
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-black/85 via-black/50 to-black/10" />
+          <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-black/20" />
           <div className="absolute inset-0 flex items-center px-10">
             <div className="max-w-xl">
               <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">The team</p>
@@ -83,10 +83,10 @@ export function TrustSection() {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 66vw"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-background/70 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent" />
             <div className="absolute bottom-4 left-4">
-              <p className="text-sm font-bold text-white">Pioneer House, Kisumu</p>
-              <p className="text-xs text-white/70">Our flagship training lab — fully equipped with Lenovo workstations</p>
+              <p className="text-sm font-bold text-white drop-shadow">Pioneer House, Kisumu</p>
+              <p className="text-xs text-white/80 drop-shadow">Our flagship training lab — fully equipped with Lenovo workstations</p>
             </div>
           </div>
           <div className="relative rounded-2xl overflow-hidden h-48 border border-border">
@@ -94,13 +94,13 @@ export function TrustSection() {
               src="/images/MUSICA%20HACKATHON/SPK_6506.jpg"
               alt="Students at MUCISA Hackathon"
               fill
-              className="object-cover"
+              className="object-cover object-top"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-background/70 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent" />
             <div className="absolute bottom-4 left-4">
-              <p className="text-sm font-bold text-white">MUCISA Hackathon</p>
-              <p className="text-xs text-white/70">Co-hosted with Maseno University</p>
+              <p className="text-sm font-bold text-white drop-shadow">MUCISA Hackathon</p>
+              <p className="text-xs text-white/80 drop-shadow">Co-hosted with Maseno University</p>
             </div>
           </div>
         </div>

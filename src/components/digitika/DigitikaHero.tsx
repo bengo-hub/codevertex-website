@@ -131,9 +131,9 @@ export function DigitikaHero() {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority={i === 0}
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <p className="text-sm font-medium text-white/90">{item.caption}</p>
+                  <p className="text-sm font-medium text-white drop-shadow">{item.caption}</p>
                 </div>
               </div>
             ))}
